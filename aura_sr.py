@@ -15,6 +15,8 @@ import torch.nn.functional as F
 from einops import rearrange, repeat, reduce
 from einops.layers.torch import Rearrange
 
+from comfy import model_management 
+
 
 def get_same_padding(size, kernel, dilation, stride):
     return ((size - 1) * (stride - 1) + dilation * (kernel - 1)) // 2
@@ -743,7 +745,7 @@ def merge_tiles(tiles, h_chunks, w_chunks, chunk_size=64):
 
 
 class AuraSR:
-    def __init__(self, config: dict[str, Any], device: str = "cuda"):
+    def __init__(self, config: dict[str, Any], device: str = model_management.get_torch_device() ):
         self.upsampler = UnetUpsampler(**config).to(device)
         self.input_image_size = config["input_image_size"]
 
